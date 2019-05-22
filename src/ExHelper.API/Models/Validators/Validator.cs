@@ -2,8 +2,21 @@ using System.Collections.Generic;
 
 namespace ExHelper.API.Models.Validators
 {
-    public interface Validator
+    public abstract class Validator
     {
-        (bool isValid, IEnumerable<Error> errors) Validate();
+        FieldConfig config;
+        public abstract string Type { get; }
+
+        public bool ForType(FieldConfig config)
+        {
+            if (config.Type == Type)
+            {
+                this.config = config;
+                return true;
+            }
+
+            return false;
+        }
+        public abstract (bool isValid, IEnumerable<Error> errors) Validate(object value);
     }
 }

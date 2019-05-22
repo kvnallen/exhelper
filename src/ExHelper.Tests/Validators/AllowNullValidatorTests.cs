@@ -10,9 +10,9 @@ namespace ExHelper.Tests.Validators
         public void Validate_Test()
         {
             //Given
-            var validator = new AllowNullValidator(new { });
+            var validator = new AllowNullValidator();
             //When
-            var result = validator.Validate();
+            var result = validator.Validate(new { });
             //Then
             result.isValid.Should().BeTrue();
         }
@@ -20,9 +20,9 @@ namespace ExHelper.Tests.Validators
         [Fact]
         public void Validate_WhenObjectIsNull_ReturnsFalse(){
             //Given
-            var validator = new AllowNullValidator(null);
+            var validator = new AllowNullValidator();
             //When
-            var result = validator.Validate();
+            var result = validator.Validate(null);
             //Then
             result.isValid.Should().BeFalse();
         }

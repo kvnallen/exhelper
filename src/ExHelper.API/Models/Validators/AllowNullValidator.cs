@@ -4,16 +4,11 @@ namespace ExHelper.API.Models.Validators
 {
     public class AllowNullValidator : Validator
     {
-        private readonly object value;
+        public override string Type => "not_null";
 
-        public AllowNullValidator(object value)
+        public override  (bool isValid, IEnumerable<Error> errors) Validate(object value)
         {
-            this.value = value;
-        }
-
-        public (bool isValid, IEnumerable<Error> errors) Validate()
-        {
-            if(this.value == null) 
+            if (value == null)
                 return (false, Error.AsList("", "The field should be empty", 0, 0));
 
             return (true, Error.Empty());

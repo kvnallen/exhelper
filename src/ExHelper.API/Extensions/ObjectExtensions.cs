@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -8,20 +9,17 @@ namespace ExHelper.API.Extensions
 {
     public static class ObjectExtensions
     {
-        public static T ToObject<T>(this IDictionary<string, object> source)
-            where T : class, new()
+        public static dynamic ToObject(this IDictionary<string, object> source)
         {
-            var someObject = new T();
-            var someObjectType = someObject.GetType();
+            dynamic expandoObject = new ExpandoObject();
+            var eoColl = (ICollection<KeyValuePair<string, object>>)expandoObject;
 
-            foreach (var item in source)
+            foreach (var kvp in source)
             {
-                someObjectType
-                         .GetProperty(item.Key)
-                         .SetValue(someObject, item.Value, null);
+                eoColl.Add(kvp);
             }
 
-            return someObject;
+            return expandoObject;
         }
 
         public static IDictionary<string, object> AsDictionary(this object source, BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)

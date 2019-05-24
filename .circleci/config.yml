@@ -5,15 +5,6 @@ jobs:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
     steps:
       - checkout
-      - run:
-        name: Restore Packages
-        command:
-          dotnet restore
-      - run:
-        name: Build App
-        command:
-          dotnet build
-      - run:
-        name: Run App
-        command:
-          dotnet run
+      - run: dotnet restore
+      - run: dotnet build
+      - run: dotnet run

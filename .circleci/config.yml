@@ -7,4 +7,4 @@ jobs:
       - checkout
       - run: dotnet restore src
       - run: dotnet build  src
-      - run: dotnet run  src
+      - run: dotnet test  src

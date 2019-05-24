@@ -49,7 +49,7 @@ namespace ExHelper.API.UseCases
                         }
 
                         var fieldName = GetFieldName(sheet, cellIndex, fieldConfig);
-                        var value = GetCellValue(fieldConfig, cell);
+                        var value = cell.GetValue(fieldConfig);
 
                         var valueErrors = _validators
                             .Where(x => x.CanUse(fieldConfig))
@@ -83,30 +83,6 @@ namespace ExHelper.API.UseCases
         private static string GetFieldName(ISheet sheet, int cellIndex, FieldConfig fieldConfig)
         {
             return fieldConfig?.Name ?? sheet.GetRow(0).GetCell(cellIndex).StringCellValue;
-        }
-
-        private object GetCellValue(FieldConfig fieldConfig, ICell cell)
-        {
-            if (cell is null) return null;
-
-            switch (fieldConfig.Type)
-            {
-                case "numeric":
-                    {
-                        if (double.TryParse(cell.ToString(), out var result))
-                            return result;
-
-                        return null;
-                    }
-                case "boolean" when cell.CellType == CellType.Boolean:
-                    return cell.BooleanCellValue;
-                case "date":
-                    return cell.DateCellValue;
-                case "list" when cell.CellType == CellType.String:
-                    return cell.ToString().Split(",");
-                default:
-                    return cell?.ToString();
-            }
         }
     }
 }

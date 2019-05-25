@@ -49,7 +49,9 @@ namespace ExHelper.API.Extensions
 
         private static double? TryGetNumeric(ICell cell)
         {
-            if (double.TryParse(cell.ToString(), out var result))
+            if(cell.CellType == CellType.Numeric) return cell.NumericCellValue;
+            string cellStr = cell.ToString();
+            if (double.TryParse(cellStr, out var result))
                 return result;
 
             return null;

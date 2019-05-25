@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ExHelper.API.Models
 {
@@ -7,5 +8,7 @@ namespace ExHelper.API.Models
         public int StartRow { get; set; }
         public string SheetName { get; set; }
         public IEnumerable<FieldConfig> Fields { get; set; }
+
+        public FieldConfig FieldAt(int index) => Fields.SingleOrDefault(x => x.Index == index);
     }
 }

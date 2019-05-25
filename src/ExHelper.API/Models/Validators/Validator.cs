@@ -2,8 +2,10 @@ using System.Collections.Generic;
 
 namespace ExHelper.API.Models.Validators
 {
-    public interface Validator
+    public abstract class Validator
     {
-        (bool isValid, IEnumerable<Error> errors) Validate();
+        public abstract bool CanUse(FieldConfig config);
+
+        public abstract ValidationResult Validate(object value, int row, FieldConfig config);
     }
 }

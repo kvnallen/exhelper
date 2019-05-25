@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ExHelper.API.Models.Validators;
 using ExHelper.API.UseCases;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +28,10 @@ namespace ExHelper.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ExcelProcessor>();
+            services
+                .AddTransient(typeof(Validator), typeof(NotNull))
+                .AddTransient(typeof(Validator), typeof(Numeric))
+                ;
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

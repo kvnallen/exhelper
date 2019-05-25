@@ -10,21 +10,21 @@ namespace ExHelper.Tests.Validators
         public void Validate_Test()
         {
             //Given
-            var validator = new AllowNullValidator(new { });
+            var validator = new NotNull();
             //When
-            var result = validator.Validate();
+            var result = validator.Validate(new { }, 0, new API.Models.FieldConfig());
             //Then
-            result.isValid.Should().BeTrue();
+            result.IsValid.Should().BeTrue();
         }
 
         [Fact]
         public void Validate_WhenObjectIsNull_ReturnsFalse(){
             //Given
-            var validator = new AllowNullValidator(null);
+            var validator = new NotNull();
             //When
-            var result = validator.Validate();
+            var result = validator.Validate(null, 0, new API.Models.FieldConfig());
             //Then
-            result.isValid.Should().BeFalse();
+            result.IsValid.Should().BeFalse();
         }
     }
 }

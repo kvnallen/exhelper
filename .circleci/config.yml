@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.2
+    steps:
+      - checkout
+      - run: 
+          name: Restore Packages
+          command: 
+            dotnet restore src
+      - run: dotnet build  src
+      - run: dotnet test  src

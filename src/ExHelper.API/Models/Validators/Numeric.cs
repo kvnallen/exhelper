@@ -7,8 +7,6 @@ namespace ExHelper.API.Models.Validators
 {
     public class Numeric : Validator
     {
-        public override string Type => throw new NotImplementedException();
-
         public override bool CanUse(FieldConfig config) => config.Type == "numeric";
 
         public override ValidationResult Validate(object value, int row, FieldConfig config)

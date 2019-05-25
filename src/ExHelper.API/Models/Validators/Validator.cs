@@ -4,9 +4,6 @@ namespace ExHelper.API.Models.Validators
 {
     public abstract class Validator
     {
-
-        public abstract string Type { get; }
-
         public abstract bool CanUse(FieldConfig config);
 
         public abstract ValidationResult Validate(object value, int row, FieldConfig config);

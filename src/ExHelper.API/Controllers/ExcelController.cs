@@ -19,7 +19,7 @@ namespace ExHelper.API.Controllers
         }
 
         [HttpGet]
-        public async Task<dynamic> Get(
+        public async Task<ExcelResult> Get(
             IFormFile file,
             [FromForm(Name = "config")] string configJson)
         {

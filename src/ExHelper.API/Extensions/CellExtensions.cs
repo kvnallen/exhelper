@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using ExHelper.API.Models;
 using NPOI.SS.UserModel;
 
@@ -15,8 +17,7 @@ namespace ExHelper.API.Extensions
             {
                 case "numeric": return TryGetNumeric(cell);
                 case "boolean": return TryGetBool(cell);
-                case "date":
-                    return cell.DateCellValue;
+                case "date": return TryGetDateTime(cell, config);
                 case "list" when cell.CellType == CellType.String:
                     return cell.ToString().Split(",");
                 default:
@@ -24,9 +25,22 @@ namespace ExHelper.API.Extensions
             }
         }
 
-        public static void GetValue(object cellm)
+        private static DateTime? TryGetDateTime(ICell cell, FieldConfig config)
         {
-            throw new NotImplementedException();
+            var cellValue = cell.ToString();
+            var formats = config.Validations?.Formats is null || !config.Validations.Formats.Any()
+                ? new[] { "dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy" }
+                : config.Validations.Formats;
+
+            foreach (var format in formats)
+            {
+                if (DateTime.TryParseExact(cellValue, format, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var date))
+                {
+                    return date;
+                }
+            }
+
+            return null;
         }
 
         private static bool? TryGetBool(ICell cell)
@@ -49,7 +63,7 @@ namespace ExHelper.API.Extensions
 
         private static double? TryGetNumeric(ICell cell)
         {
-            if(cell.CellType == CellType.Numeric) return cell.NumericCellValue;
+            if (cell.CellType == CellType.Numeric) return cell.NumericCellValue;
             string cellStr = cell.ToString();
             if (double.TryParse(cellStr, out var result))
                 return result;

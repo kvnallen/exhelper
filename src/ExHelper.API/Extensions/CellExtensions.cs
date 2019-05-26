@@ -28,6 +28,7 @@ namespace ExHelper.API.Extensions
         private static DateTime? TryGetDateTime(ICell cell, FieldConfig config)
         {
             var cellValue = cell.ToString();
+
             var formats = config.Validations?.Formats is null || !config.Validations.Formats.Any()
                 ? new[] { "dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy" }
                 : config.Validations.Formats;

@@ -79,7 +79,7 @@ namespace ExHelper.Tests.Extensions
 
         [Theory]
         [MemberData(nameof(DateScenarios))]
-        public void GetValue_DateTests(string strDate, string[] formats, DateTime expected)
+        public void GetValue_DateTests(string strDate, string[] formats, DateTime? expected)
         {
             //Given
             _cell.Setup(x => x.ToString()).Returns(strDate);
@@ -104,8 +104,8 @@ namespace ExHelper.Tests.Extensions
             new object[] { "09/04/1992", new[] { "dd/MM/yyyy" }, new DateTime(1992, 04, 09) },
             new object[] { "28/02/2019", new[] { "dd/MM/yyyy" }, new DateTime(2019, 02, 28) },
             new object[] { "28/02/2019 01", new[] { "dd/MM/yyyy ss" }, new DateTime(2019, 02, 28, 0, 0, 1) },
-            new object[] { "null",  null },
-            new object[] { null,  null },
+            new object[] { "null",  null, null },
+            new object[] { null,  null, null },
         };
 
         [Theory(DisplayName = "When field is datetime, and format is not specified, should use dd/MM/yyyy")]

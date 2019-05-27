@@ -8,5 +8,6 @@ namespace ExHelper.API.Models
         public int? MaxLength { get; set; }
         public int? MinLength { get; set; }
         public string Regex { get; set; }
+        public string[] ListValues { get; set; }
     }
 }

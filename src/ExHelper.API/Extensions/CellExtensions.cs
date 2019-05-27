@@ -17,8 +17,6 @@ namespace ExHelper.API.Extensions
                 case "boolean": return TryGetBool(cell);
                 case "date":
                     return cell.DateCellValue;
-                case "list" when cell.CellType == CellType.String:
-                    return cell.ToString().Split(",");
                 default:
                     return cell?.ToString();
             }

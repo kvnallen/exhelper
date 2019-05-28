@@ -23,7 +23,7 @@ namespace ExHelper.API.UseCases
         public ExcelResult Process(Stream excelFile, ExcelConfig config)
         {
             var start = DateTime.Now;
-            var hssfwb = new XSSFWorkbook(excelFile);
+            var hssfwb = WorkbookFactory.Create(excelFile);
             var sheet = hssfwb.GetSheet(config.SheetName);
             var errors = new List<Error>();
             var objects = new List<object> { };

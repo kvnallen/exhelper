@@ -1,8 +1,9 @@
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using ExHelper.API.Models;
 using ExHelper.API.Models.Validators;
 using ExHelper.API.UseCases;
+using FluentAssertions;
 using Xunit;
 
 namespace ExHelper.Tests.UseCases
@@ -10,17 +11,36 @@ namespace ExHelper.Tests.UseCases
     public class ExcelProcessorTests
     {
         [Theory]
-        [EmbeddedResourceData("ExHelper.Tests/Resources/sample_worksheet.xlsx")]
-        public void Process_ShouldProcessFile(Stream stream)
+        [InlineData("./Resources/sample_sheet.xlsx")]
+        [InlineData("./Resources/sample_sheet.xls")]
+        public void Process_ShouldProcessFiles(string fileName)
         {
-            // var assembly = typeof(ExcelProcessorTests).GetTypeInfo().Assembly;
-            // var stream = assembly.GetManifestResourceStream("./Resources/sample_worksheet.xlsx");
-           
+
             //Given
             var processor = new ExcelProcessor(Enumerable.Empty<Validator>());
             //When
-            processor.Process(stream, new API.Models.ExcelConfig());
+            var config = new API.Models.ExcelConfig
+            {
+                SheetName = "one_row",
+                Fields = new List<FieldConfig>
+                {
+                    new FieldConfig { Index = 0  },
+                    new FieldConfig { Index = 1  },
+                    new FieldConfig { Index = 2, Type = "numeric" },
+                    new FieldConfig { Index = 3  },
+                }
+            };
+
+            var result = processor.Process(fileName, config);
             //Then
+
+            var firstItem = result.Json.First();
+            var name = ((dynamic)firstItem).Name;
+            double age = ((dynamic)firstItem).Age;
+
+            Assert.Equal("Kevin", name);
+            Assert.Equal(10, age);
+            result.Errors.Should().BeEmpty();
         }
     }
 }

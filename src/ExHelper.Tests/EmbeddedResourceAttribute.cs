@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Xunit.Sdk;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ExHelper.Tests
 {
@@ -29,15 +30,15 @@ namespace ExHelper.Tests
         {
             var assembly = typeof(EmbeddedResourceDataAttribute).GetTypeInfo().Assembly;
             resourceName = resourceName.Replace("/", ".");
-            using (var stream = assembly.GetManifestResourceStream(resourceName))
-            {
-                if (stream == null)
-                {
-                    throw new InvalidOperationException("Could not load manifest resource stream.");
-                }
+            var stream = assembly.GetManifestResourceStream(resourceName);
 
-                return stream;
+
+            if (stream == null)
+            {
+                throw new InvalidOperationException("Could not load manifest resource stream.");
             }
+
+            return stream;
         }
     }
 }

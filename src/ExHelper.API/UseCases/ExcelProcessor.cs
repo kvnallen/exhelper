@@ -6,6 +6,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 
@@ -20,13 +21,13 @@ namespace ExHelper.API.UseCases
             this._validators = validators;
         }
 
-        public ExcelResult Process(Stream excelFile, ExcelConfig config)
+        public ExcelResult Process(string filePath, ExcelConfig config)
         {
             var start = DateTime.Now;
-            var hssfwb = new XSSFWorkbook(excelFile);
-            var sheet = hssfwb.GetSheet(config.SheetName);
+
+            var sheet = GetSheet(filePath, config);
             var errors = new List<Error>();
-            var objects = new List<object> { };
+            var objects = new List<ExpandoObject> { };
 
             for (int rowIndex = config.StartRow; rowIndex <= sheet.LastRowNum; rowIndex++)
             {
@@ -73,9 +74,24 @@ namespace ExHelper.API.UseCases
                 }
             }
 
-            var sheetObject = errors.Any() ? Enumerable.Empty<object>() : objects;
+            var sheetObject = errors.Any() ? Enumerable.Empty<ExpandoObject>() : objects;
 
             return new ExcelResult(sheet.PhysicalNumberOfRows, start, config.SheetName, sheetObject, errors);
+        }
+
+        private static ISheet GetSheet(string filePath, ExcelConfig config)
+        {
+            using (var file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                if (filePath.EndsWith("xls"))
+                {
+                    var poifs = new NPOI.POIFS.FileSystem.NPOIFSFileSystem(new FileInfo(filePath), true);
+                    var hssfwb = WorkbookFactory.Create(poifs);
+                    return hssfwb.GetSheet(config.SheetName);
+                }
+
+                return new XSSFWorkbook(file).GetSheet(config.SheetName);
+            }
         }
 
         private static bool IsEmptyRow(IRow row) => row.Cells.All(x => x.CellType == CellType.Blank);

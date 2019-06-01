@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 
 namespace ExHelper.API.Models
 {
@@ -9,7 +10,7 @@ namespace ExHelper.API.Models
             int totalRows, 
             DateTime startedAt, 
             string sheetName, 
-            object jsonObject, IEnumerable<Error> errors)
+            IEnumerable<ExpandoObject> jsonObject, IEnumerable<Error> errors)
         {
             if (string.IsNullOrEmpty(sheetName))
             {
@@ -28,7 +29,7 @@ namespace ExHelper.API.Models
         public DateTime End { get; set; }
         public int TotalRows { get; set; }
         public string SheetName { get; set; }
-        public object Json { get; set; }
+        public IEnumerable<ExpandoObject> Json { get; set; }
         public IEnumerable<Error> Errors { get; set; }
     }
 }

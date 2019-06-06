@@ -18,14 +18,12 @@ namespace ExHelper.API.Extensions
                 case "numeric": return TryGetNumeric(cell);
                 case "boolean": return TryGetBool(cell);
                 case "date": return TryGetDateTime(cell, config);
-                case "list" when cell.CellType == CellType.String:
-                    return cell.ToString().Split(",");
-                default:
-                    return cell?.ToString();
+                case "list": return cell.ToString().Split(",");
+                default: return cell?.ToString();
             }
         }
 
-        private static DateTime? TryGetDateTime(ICell cell, FieldConfig config)
+        private static DateResult TryGetDateTime(ICell cell, FieldConfig config)
         {
             var cellValue = cell.ToString();
 
@@ -37,11 +35,11 @@ namespace ExHelper.API.Extensions
             {
                 if (DateTime.TryParseExact(cellValue, format, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var date))
                 {
-                    return date;
+                    return new DateResult(cellValue, date, true);
                 }
             }
 
-            return null;
+            return new DateResult(cellValue, default, false);
         }
 
         private static bool? TryGetBool(ICell cell)

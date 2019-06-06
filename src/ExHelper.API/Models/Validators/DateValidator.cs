@@ -18,7 +18,7 @@ namespace ExHelper.API.Models.Validators
 
             if (!valid)
             {
-                return ValidationResult.Fail(config, $"Invalid date {result?.Value}".Trim(), row);
+                return ValidationResult.Fail(config, $"invalid date {result?.Value}".Trim(), row);
             }
 
             return ValidationResult.Success(value);

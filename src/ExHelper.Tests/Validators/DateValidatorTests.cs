@@ -61,5 +61,16 @@ namespace ExHelper.Tests.Validators
             result.IsValid.Should().BeFalse();
             result.Errors[0].Value.Should().Contain("invalid_format");
         }
+
+        [Fact]
+        public void Validate_WhenObjectIsNotDateResult_ReturnError()
+        {
+            //When
+            var result = validator.Validate("", 1, new FieldConfig());
+
+            //Then
+            result.IsValid.Should().BeFalse();
+            result.Errors[0].Value.Should().Contain("invalid date");
+        }
     }
 }

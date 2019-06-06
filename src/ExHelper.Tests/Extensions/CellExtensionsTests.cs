@@ -79,7 +79,7 @@ namespace ExHelper.Tests.Extensions
 
         [Theory]
         [MemberData(nameof(DateScenarios))]
-        public void GetValue_DateTests(string strDate, string[] formats, DateTime? expected)
+        public void GetValue_DateTests(string strDate, string[] formats, DateResult expected)
         {
             //Given
             _cell.Setup(x => x.ToString()).Returns(strDate);
@@ -95,22 +95,47 @@ namespace ExHelper.Tests.Extensions
             });
 
             //Then
-            value.Should().Be(expected);
+            value.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public void GetValue_WhenDateFormatIsInvalid_ReturnsInvalidDate()
+        {
+            //Given
+            _cell.Setup(x => x.ToString()).Returns("xxx");
+
+            //When
+            var value = CellExtensions.GetValue(_cell.Object, new FieldConfig
+            {
+                Type = "date",
+                Validations = new ValidationOptions { }
+            });
+
+            //Then
+            value.Should().BeOfType(typeof(DateResult));
         }
 
         public static IEnumerable<object[]> DateScenarios => new List<object[]>
         {
-            new object[] { "09/04/1992 15:11:12", new[] { "dd/MM/yyyy HH:mm:ss" }, new DateTime(1992, 04, 09, 15, 11, 12) },
-            new object[] { "09/04/1992", new[] { "dd/MM/yyyy" }, new DateTime(1992, 04, 09) },
-            new object[] { "28/02/2019", new[] { "dd/MM/yyyy" }, new DateTime(2019, 02, 28) },
-            new object[] { "28/02/2019 01", new[] { "dd/MM/yyyy ss" }, new DateTime(2019, 02, 28, 0, 0, 1) },
-            new object[] { "null",  null, null },
-            new object[] { null,  null, null },
+            new object[] {
+                "09/04/1992 15:11:12",
+                new[] { "dd/MM/yyyy HH:mm:ss" },
+                DateResult.Valid("09/04/1992 15:11:12", new DateTime(1992, 04, 09, 15, 11, 12))
+            },
+            new object[] {
+                "09/04/1992",
+                new[] { "dd/MM/yyyy" },
+                DateResult.Valid("09/04/1992", new DateTime(1992, 04, 09))
+            },
+            new object[] { "28/02/2019", new[] { "dd/MM/yyyy" }, DateResult.Valid("28/02/2019", new DateTime(2019, 02, 28)) },
+            new object[] { "28/02/2019 01", new[] { "dd/MM/yyyy ss" }, DateResult.Valid("28/02/2019 01", new DateTime(2019, 02, 28, 0, 0, 1)) },
+            new object[] { "null",  null, new DateResult("null", default, false)  },
+            new object[] { null,  null, new DateResult(null, default, false) },
         };
 
         [Theory(DisplayName = "When field is datetime, and format is not specified, should use dd/MM/yyyy")]
         [MemberData(nameof(DateWithoutFormatScenarios))]
-        public void GetValue_DateTimeWithoutFormat(string strDate, DateTime? expected)
+        public void GetValue_DateTimeWithoutFormat(string strDate, DateResult expected)
         {
             //Given
             _cell.Setup(x => x.ToString()).Returns(strDate);
@@ -122,17 +147,17 @@ namespace ExHelper.Tests.Extensions
             });
 
             //Then
-            value.Should().Be(expected);
+            value.Should().BeEquivalentTo(expected);
         }
 
         public static IEnumerable<object[]> DateWithoutFormatScenarios => new List<object[]>
         {
-            new object[] { "09/04/1992 15:11:12", new DateTime(1992, 04, 09, 15, 11, 12) },
-            new object[] { "09/04/1992",  new DateTime(1992, 04, 09) },
-            new object[] { "28/02/2019",  new DateTime(2019, 02, 28) },
-            new object[] { "null",  null },
-            new object[] { null,  null },
+            new object[] { "09/04/1992 15:11:12", DateResult.Valid("09/04/1992 15:11:12", new DateTime(1992, 04, 09, 15, 11, 12)) },
+            new object[] { "09/04/1992",  DateResult.Valid("09/04/1992", new DateTime(1992, 04, 09)) },
+            new object[] { "28/02/2019",  DateResult.Valid("28/02/2019", new DateTime(2019, 02, 28)) },
+            new object[] { "null",  new DateResult("null", default, false) },
+            new object[] { null,   new DateResult(null, default, false) },
         };
-       
+
     }
 }

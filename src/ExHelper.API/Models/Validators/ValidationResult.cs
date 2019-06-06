@@ -15,9 +15,9 @@ namespace ExHelper.API.Models.Validators
             Value = result
         };
         internal static ValidationResult Success() => Success(null);
-        internal static ValidationResult Fail(FieldConfig config, string v, int row) => new ValidationResult
+        internal static ValidationResult Fail(FieldConfig config, string message, int row) => new ValidationResult
         {
-            Errors = Error.AsList(config.Name, "Invalid number", config.Index, row)
+            Errors = Error.AsList(config.Name, message, config.Index, row)
         };
     }
 }

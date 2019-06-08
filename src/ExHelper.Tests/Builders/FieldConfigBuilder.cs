@@ -11,12 +11,20 @@ namespace ExHelper.Tests.Builders
             _config = new FieldConfig();
         }
 
-        public FieldConfigBuilder NotEmpty() {
+        public FieldConfigBuilder MinLength(int? minLength = null)
+        {
+            _config.Validations.MinLength = minLength;
+            return this;
+        }
+        
+        public FieldConfigBuilder NotEmpty()
+        {
             _config.Validations.NotEmpty = true;
             return this;
         }
 
-        public FieldConfig Build(){
+        public FieldConfig Build()
+        {
             return _config;
         }
     }

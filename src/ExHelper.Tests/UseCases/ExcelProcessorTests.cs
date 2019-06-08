@@ -36,7 +36,7 @@ namespace ExHelper.Tests.UseCases
 
             var firstItem = result.Json.First();
             var name = ((dynamic)firstItem).Name;
-            double age = ((dynamic)firstItem).Age;
+            decimal age = ((dynamic)firstItem).Age;
 
             Assert.Equal("Kevin", name);
             Assert.Equal(10, age);

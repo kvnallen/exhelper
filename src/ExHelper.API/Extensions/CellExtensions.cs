@@ -60,11 +60,11 @@ namespace ExHelper.API.Extensions
             return null;
         }
 
-        private static double? TryGetNumeric(ICell cell)
+        private static decimal? TryGetNumeric(ICell cell)
         {
-            if (cell.CellType == CellType.Numeric) return cell.NumericCellValue;
+            if (cell.CellType == CellType.Numeric) return (decimal)cell.NumericCellValue;
             string cellStr = cell.ToString();
-            if (double.TryParse(cellStr, out var result))
+            if (decimal.TryParse(cellStr, out var result))
                 return result;
 
             return null;

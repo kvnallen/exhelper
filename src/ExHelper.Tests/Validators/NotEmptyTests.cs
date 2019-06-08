@@ -66,7 +66,7 @@ namespace ExHelper.Tests.Validators
         {
            //Given
             var validator = new NotEmpty();
-
+            
             //When
             var config = new FieldConfigBuilder().Build();
             var result = validator.Validate(value, 0, config);

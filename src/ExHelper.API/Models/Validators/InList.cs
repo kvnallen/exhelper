@@ -12,6 +12,10 @@ namespace ExHelper.API.Models.Validators
 
         public override ValidationResult Validate(object value, int row, FieldConfig config)
         {
+            if(value == null || string.IsNullOrEmpty(value.ToString())) return ValidationResult.Fail(config, "The column value is null or empty", row);
+            if (config.Validations.ListValues == null) return ValidationResult.Fail(config, "The list of values is null", row);
+            if (config.Validations.ListValues.Count() == 0) return ValidationResult.Fail(config, "The list of values is empty", row);
+
             var simplifiedList = SimplifyTextList(config.Validations.ListValues);
             var simplifiedValue = value.ToString().RemoveDiacritics().RemoveSpecialCharacters().ToLower();
 

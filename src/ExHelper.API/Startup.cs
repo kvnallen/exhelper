@@ -32,6 +32,7 @@ namespace ExHelper.API
                 .AddTransient(typeof(Validator), typeof(NotNull))
                 .AddTransient(typeof(Validator), typeof(Numeric))
                 .AddTransient(typeof(Validator), typeof(DateValidator))
+                .AddTransient(typeof(Validator), typeof(NotEmpty))
                 ;
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
